@@ -38,8 +38,10 @@ exports.run = async (client, message, args) => {
 
   message.channel.send("The game will begin in 3 seconds!");
   await timer(3000);
-  for (let i = 0; i < numTimes; i++) {
-    if (stopNext) return;
+
+  //The game!
+  for (let i = 0; i < numTimes; i++) { //We go as many times as they entered.
+    if (stopNext) return; //If we set the stop flag, we're done.
     message.channel.send("This is round " + (i+1) + "! Get ready...");
     let mon = Object.keys(dex)[Math.floor(Math.random() * Object.keys(dex).length)]; //Get a random pokemon from the pokedex.
     //Certain Pokemon don't exist (they have negative numbers!) Also, ignore forms.
@@ -106,48 +108,50 @@ exports.run = async (client, message, args) => {
       return m.content.startsWith("!stop");
     }
 
-    message.channel.awaitMessages(stopFilter, {
-        max: 1,
-        time: 10000,
-        errors: ['time']
-      })
-      .then(collected => {
-        //console.log(collected);
-        message.channel.send("Stopping after this one...");
-        stopNext = true;
-      })
-      .catch(collected => {
-        //console.log(collected);
-      });
+    const stopCollector = message.channel.createMessageCollector(stopFilter, { time: 10000 }); //This will check for !stop
 
-    message.channel.awaitMessages(filter, {
-        max: 1,
-        time: 10000,
-        errors: ['time']
-      })
-      .then(collected => {
-        //console.log(collected);
-        message.channel.send(`${collected.first().author} got the correct answer! [` + correctAnswer + "]");
-        if (!listOfPlayers.includes(collected.first().author.id)) {
-          listOfPlayers[lastIndex] = collected.first().author.id;
-          pointsTally[lastIndex] = 1;
-          lastIndex++;
-        } else {
-          pointsTally[listOfPlayers.indexOf(collected.first().author.id)]++;
+    stopCollector.on('collect', m => {
+      m.channel.send("Stopping after this one...");
+      stopNext = true;
+    });
+
+    const ansCollector = message.channel.createMessageCollector(filter, { time: 10000 }); //This will check for answer filters
+
+    ansCollector.on('collect', m => {
+      m.channel.send(`${m.author} got it right! [${correctAnswer}]`);
+      if (!listOfPlayers.includes(m.author.id)) {
+        listOfPlayers[lastIndex] = m.author.id;
+        pointsTally[lastIndex] = 1;
+        lastIndex++;
+      } else {
+        pointsTally[listOfPlayers.indexOf(m.author.id)]++;
+      }
+      console.log(pointsTally);
+      console.log(listOfPlayers);
+      ansCollector.stop(); //Stop it
+    });
+
+    ansCollector.on('end', collected => {
+      //If nobody answered, collected.size will be 0.
+      console.log("END!");
+      if (collected.size == 0) {
+        message.channel.send(`Nobody got the answer! The correct answer was ${correctAnswer}.`);
+      }
+    });
+    
+    for (let timerChunks = 0; timerChunks < 100; timerChunks++) {
+      if (ansCollector.ended) {
+        if (i < numTimes - 1) {
+          message.channel.send("The next round will begin in 2 seconds.");
         }
-        console.log(pointsTally);
-        console.log(listOfPlayers);
-      })
-      .catch(collected => {
-        //console.log(collected);
-        message.channel.send('Nobody guessed it... It was ' + correctAnswer + "!");
-      });
-
-
-
-    await timer(10000);
-    console.log("Timer finished.");
+        await timer(2000);
+        break;
+      }
+      await timer(100); //100 millisecond checks.
+    }
   }
+
+ 
   console.log(listOfPlayers + " after round.");
   console.log(pointsTally);
   let maxInds = findMaxIndex(pointsTally);
