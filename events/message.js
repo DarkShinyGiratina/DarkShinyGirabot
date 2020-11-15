@@ -8,13 +8,13 @@ module.exports = async (client, message) => {
 
   // Our standard argument/command name definition.
   const args = message.content.slice(client.config.prefix.length).trim().split(/ +/g);
-  const command = args.shift().toLowerCase();
+  const commandName = args.shift().toLowerCase();
 
   // Grab the command data from the client.commands Enmap
-  const cmd = client.commands.get(command) || client.commands.find(cmd => cmd.aliases && cmd.aliases.includes(command));
+  const command = client.commands.get(commandName) || client.commands.find(cmd => cmd.aliases && cmd.aliases.includes(commandName));
 
   // If that command doesn't exist, silently exit and do nothing
-  if (!cmd) return;
+  if (!command) return;
 
   let {
     queuePerServer,
@@ -46,7 +46,7 @@ module.exports = async (client, message) => {
       queuePerServer[currentServInd]--;
       return;
     }
-    await cmd.run(client, message, args);
+    await command.run(client, message, args);
     queuePerServer[currentServInd] = 0;
   } catch (e) {
     message.channel.send("An error has occurred!\nCheck logs for info...");

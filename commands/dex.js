@@ -9,6 +9,16 @@ let dex = require("../data/pokedex.js").Pokedex;
 let formats = require("../data/formats.js").FormatsData;
 
 const Discord = require("discord.js");
+
+exports.aliases = ["dt", "data"];
+
+exports.help = {
+  name: "dex",
+  description: "Gives information on a specific Pokemon.",
+  aliases: exports.aliases,
+  usage: " <pokemon>"
+};
+
 exports.run = (client, message, args) => {
   if (!args.length) {
     message.channel.send("Please actually give a Pokemon.");
@@ -103,6 +113,7 @@ exports.run = (client, message, args) => {
 
     //Image stuff
     let imgPoke = name.toLowerCase();
+    
     if (imgPoke.split("-").length - 1 > 1 && !(imgPoke.includes("totem"))) {
       imgPoke = removeAllButFirstHyphen(imgPoke);
     }
@@ -111,15 +122,19 @@ exports.run = (client, message, args) => {
       imgPoke = "zygarde-10";
     }
 
+    if (imgPoke === "flabébé") {
+      imgPoke = "flabebe";
+    }
+
     if (imgPoke.startsWith("farfetch") && imgPoke.endsWith("galar"))  { //Galarian Farfetch'd
       imgPoke = "farfetchd-galar";
     }
 
     //A bunch of really dumb hard coded error handling.
-    if (imgPoke === ("kommo-o") || imgPoke === ("hakamo-o") || imgPoke === ("jangmo-o") || imgPoke === ("type: null") || imgPoke === ("nidoran-m") || imgPoke.startsWith("farfetch") && !imgPoke.endsWith("galar") || imgPoke.startsWith("sirfetch")) {
+    if (imgPoke === ("kommo-o") || imgPoke === ("hakamo-o") || imgPoke === ("jangmo-o") || imgPoke === ("type: null") || imgPoke === ("nidoran-m") || imgPoke.startsWith("farfetch") && !imgPoke.endsWith("galar") || imgPoke === ("sirfetch")) {
       imgPoke = removeSpecialCharacters(imgPoke);
     }
-
+    
     console.log(imgPoke + " before image!");
     let imageURL = 'https://play.pokemonshowdown.com/sprites/xyani/' + imgPoke.replace(" ", "") + ".gif";
 
@@ -176,4 +191,3 @@ function removeAllButFirstHyphen(str) {
   return str.replace(/[-](?!.*[-])/g, "");
 }
 
-exports.aliases = ["dt", "data"];

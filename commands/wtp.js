@@ -6,6 +6,17 @@ var XMLHttpRequest = require("xmlhttprequest").XMLHttpRequest;
 const {
   removeSpecialCharacters
 } = require("../globalFunctions.js")
+
+exports.aliases = [];
+
+exports.help = {
+  name: "wtp",
+  description: "Starts a guessing game of Who's That Pokemon!",
+  aliases: exports.aliases,
+  usage: " <amount of times to play (1-25)>"
+};
+
+
 exports.run = async (client, message, args) => {
   if (!args.length) {
     message.channel.send("Please enter the amount of times you want to run the game! (1-25)");
@@ -30,7 +41,7 @@ exports.run = async (client, message, args) => {
   for (let i = 0; i < numTimes; i++) {
     if (stopNext) return;
     message.channel.send("This is round " + (i+1) + "! Get ready...");
-    let mon = Object.keys(dex)[Math.floor(Math.random() * Object.keys(dex).length)];
+    let mon = Object.keys(dex)[Math.floor(Math.random() * Object.keys(dex).length)]; //Get a random pokemon from the pokedex.
     //Certain Pokemon don't exist (they have negative numbers!) Also, ignore forms.
     while (dex[mon].num < 0 || dex[mon].baseSpecies) { 
       mon = Object.keys(dex)[Math.floor(Math.random() * Object.keys(dex).length)];
@@ -47,6 +58,10 @@ exports.run = async (client, message, args) => {
 
     if (imgPoke === "zygarde-10%") {
       imgPoke = "zygarde-10";
+    }
+
+    if (imgPoke === "flabébé") {
+      imgPoke = "flabebe";
     }
 
     if (imgPoke.startsWith("farfetch") && imgPoke.endsWith("galar"))  { //Galarian Farfetch'd
@@ -144,14 +159,14 @@ exports.run = async (client, message, args) => {
 
   let leaderboard = "";
   for (let i = 0; i < listOfPlayers.length; i++) {
-    leaderboard += "<@" + listOfPlayers[i] + "> with " + pointsTally[i] + " point";
+    leaderboard += "<@" + listOfPlayers[i] + "> with " + pointsTally[i] + " point"; //Just add players to an LB string.
     if (pointsTally[i] > 1) {
       leaderboard += "s";
     }
     leaderboard += "\n";
   }
 
-  if (maxInds.length == 1) {
+  if (maxInds.length == 1) { //1 winner.
     let pointOrPoints = "points";
     if (pointsTally[maxInds[0]] == 1) {
       pointOrPoints = "point";
@@ -160,17 +175,17 @@ exports.run = async (client, message, args) => {
       pointsTally[maxInds[0]] + " " + pointOrPoints + "!");
   }
 
-  else {
+  else { //Ties!
     let winnerString = "";
     for (let i = 0; i < maxInds.length; i++) {
       if (i == maxInds.length-1) {
         winnerString += "and ";
       }
       winnerString += "<@" + listOfPlayers[maxInds[i]] + ">";
-      if (maxInds.length == 2 && i < maxInds.length-1) {
+      if (maxInds.length == 2 && i < maxInds.length-1) { //No comma for two winners.
         winnerString += " ";
       }
-      else if (i < maxInds.length-1) {
+      else if (i < maxInds.length-1) { //Otherwise, commas until you're at the last one.
         winnerString += ", ";
       }
     }
@@ -276,3 +291,5 @@ function oneOff(a, b) {
   }
   return true;
 }
+
+
