@@ -51,6 +51,7 @@ module.exports = async (client, message) => {
   } catch (e) {
     message.channel.send("An error has occurred!\nCheck logs for info...");
     console.log(e.stack);
+    queuePerServer[currentServInd] = 0; //Clear the queue.
   }
 
 };

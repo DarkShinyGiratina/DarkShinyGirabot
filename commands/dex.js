@@ -1,13 +1,10 @@
-const fs = require('fs');
 const {
-  getUserFromMention,
   capitalizeFirstLetter,
   removeSpecialCharacters
 } = require("../globalFunctions.js");
 let aliases = require("../data/aliases.js").BattleAliases;
 let dex = require("../data/pokedex.js").Pokedex;
 let formats = require("../data/formats.js").FormatsData;
-
 const Discord = require("discord.js");
 
 exports.aliases = ["dt", "data"];
@@ -20,6 +17,7 @@ exports.help = {
 };
 
 exports.run = (client, message, args) => {
+  const { embedColor } = client.config; //Import the embed color.
   if (!args.length) {
     message.channel.send("Please actually give a Pokemon.");
     return;
@@ -158,7 +156,7 @@ exports.run = (client, message, args) => {
     }
 
     const monEmbed = new Discord.MessageEmbed()
-      .setColor("#0099ff")
+      .setColor(embedColor)
       .setTitle("Your Pokedex Entry")
       .setAuthor("A Pokedex Bot!")
       .setDescription("These are the stats on: " + capitalizeFirstLetter(monData.name, true))

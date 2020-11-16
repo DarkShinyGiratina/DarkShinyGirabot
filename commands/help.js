@@ -1,5 +1,4 @@
 const Discord = require("discord.js");
-
 exports.aliases = ["h", "halp"];
 
 exports.help = {
@@ -10,12 +9,13 @@ exports.help = {
 }
 
 exports.run = (client, message, args) => {
+  const { embedColor } = client.config; //Import the embed color.
   const { commands } = client; //client.commands
   const { prefix } = client.config;
   if (!args.length) { //help with no args.
     const genericHelpEmbed = new Discord.MessageEmbed()
         .setTitle("Help for DarkShinyGirabot")
-        .setColor("#0099ff")
+        .setColor(embedColor)
         .setDescription(`Generic help information. 
         Type \`${prefix}help <command name>\` for specific info!`)
         .addField("Commands", commands.map(command => "`" + command.help.name + "`").join(", "))
@@ -33,7 +33,7 @@ exports.run = (client, message, args) => {
     const specificHelpEmbed = new Discord.MessageEmbed()
         .setTitle(`Help for ${prefix}${command.help.name}`)
         .setDescription(command.help.description)
-        .setColor("#0099ff")
+        .setColor(embedColor)
         .addField("Usage", `\`${prefix}${command.help.name}${command.help.usage}\``, true)
         .setTimestamp()
         .setFooter("Made by DarkShinyGiratina#0487 with Pokemon Showdown's Data!");

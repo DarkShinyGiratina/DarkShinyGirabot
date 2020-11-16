@@ -1,12 +1,9 @@
-let dex = require("../data/pokedex.js");
-dex = dex.Pokedex;
-const Discord = require("discord.js");
-let http = require("http");
+let dex = require("../data/pokedex.js").Pokedex;
 var XMLHttpRequest = require("xmlhttprequest").XMLHttpRequest;
 const {
   removeSpecialCharacters
-} = require("../globalFunctions.js")
-
+} = require("../globalFunctions.js");
+const Discord = require("discord.js");
 exports.aliases = [];
 
 exports.help = {
@@ -18,6 +15,7 @@ exports.help = {
 
 
 exports.run = async (client, message, args) => {
+  const { embedColor } = client.config; //Import the embedColor.
   if (!args.length) {
     message.channel.send("Please enter the amount of times you want to run the game! (1-25)");
     return;
@@ -84,7 +82,7 @@ exports.run = async (client, message, args) => {
       continue; //This should get rid of anything breaking...
     }
     const monEmbed = new Discord.MessageEmbed()
-      .setColor("#0099ff")
+      .setColor(embedColor)
       .setTitle("Guess The Pokemon!")
       .setDescription("Type your guess to answer :) (Don't use any spaces, and make sure the formatting is like Pokemon Showdown!)")
       .setImage(imageURL)
@@ -207,7 +205,7 @@ exports.run = async (client, message, args) => {
   }
 
   inTandem.sort(function(a, b) {
-    return ((a.points < b.points) ? 1 : ((a.points == b.points) ? 0 : -1));
+    return ((a.points < b.points) ? 1 : ((a.points == b.points) ? 0 : -1)); //Less than, you come after in the order, equal doesn't matter, and otherwise (greater than) you come before.
   });
 
   for (let i = 0; i < inTandem.length; i++) { //Split up the object back into the arrays.
@@ -216,7 +214,7 @@ exports.run = async (client, message, args) => {
 }
 
   const leaderboardEmbed = new Discord.MessageEmbed()
-      .setColor("#0099ff")
+      .setColor(embedColor)
       .setTitle("Leaderboard")
       .setDescription("This is the leaderboard for WTP!")
       .setTimestamp()
