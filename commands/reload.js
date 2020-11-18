@@ -3,6 +3,7 @@ exports.help = {
   name: "reload",
   description: "Reloads a command (Owner only)",
   aliases: exports.aliases,
+  guildOnly: false,
   usage: " <command name>"
 };
 

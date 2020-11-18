@@ -1,4 +1,4 @@
-let serverIndex = 0;
+let channelIndex = 0;
 module.exports = async (client, message) => {
   // Ignore all bots
   if (message.author.bot) return;
@@ -16,42 +16,46 @@ module.exports = async (client, message) => {
   // If that command doesn't exist, silently exit and do nothing
   if (!command) return;
 
-  let {
-    queuePerServer,
-    serverList
-  } = require("../config.json");
-
-  //If you receive a message from a new server, add it to the list.
-  if (!serverList.includes(message.guild.id)) {
-    serverList[serverIndex] = message.guild.id;
-    queuePerServer[serverIndex] = 0;
-    serverIndex++;
+  if (message.channel.type === "dm" && command.help.guildOnly) { //Server Only commands.
+    return message.channel.send("This command only works in servers!");
   }
 
-  let currentServInd = serverList.indexOf(message.guild.id);
-  console.log(serverList);
-  console.log(currentServInd);
-  //If you receive a message, push it to the queue for that server
-  queuePerServer[currentServInd]++;
-  console.log("Queues: " + queuePerServer)
+  let {
+    queuePerChannel,
+    channelList
+  } = require("../config.json");
+
+  //If you receive a message from a new channel, add it to the list.
+  if (!channelList.includes(message.channel.id)) {
+    channelList[channelIndex] = message.channel.id;
+    queuePerChannel[channelIndex] = 0;
+    channelIndex++;
+  }
+
+  let currentChannelInd = channelList.indexOf(message.channel.id);
+  console.log(channelList);
+  console.log(currentChannelInd);
+  //If you receive a message, push it to the queue for that channel
+  queuePerChannel[currentChannelInd]++;
+  console.log("Queues: " + queuePerChannel)
   // Run the command
 
 
 
   try {
-    console.log(queuePerServer[currentServInd]);
-    //If the queue is filled for that specific server
-    if (queuePerServer[currentServInd] > 1) {
+    console.log(queuePerChannel[currentChannelInd]);
+    //If the queue is filled for that specific channel
+    if (queuePerChannel[currentChannelInd] > 1) {
       message.channel.send("Only one command may be run at once!");
-      queuePerServer[currentServInd]--;
+      queuePerChannel[currentChannelInd]--;
       return;
     }
     await command.run(client, message, args);
-    queuePerServer[currentServInd] = 0;
+    queuePerChannel[currentChannelInd] = 0;
   } catch (e) {
     message.channel.send("An error has occurred!\nCheck logs for info...");
     console.log(e.stack);
-    queuePerServer[currentServInd] = 0; //Clear the queue.
+    queuePerChannel[currentChannelInd] = 0; //Clear the queue.
   }
 
 };

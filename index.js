@@ -31,4 +31,10 @@ fs.readdir("./commands/", (err, files) => {
   });
 });
 
+
 client.login(process.env.TOKEN);
+
+client.on("ready", () => {
+  client.user.setActivity("for !help", { type: "WATCHING"}); //Set custom status.
+});
+

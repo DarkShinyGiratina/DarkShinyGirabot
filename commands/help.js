@@ -5,6 +5,7 @@ exports.help = {
   name: "help",
   description: "Gives help information!",
   aliases: exports.aliases,
+  guildOnly: false,
   usage: " <command name>"
 }
 
@@ -30,9 +31,10 @@ exports.run = (client, message, args) => {
       return message.channel.send("That's not a valid command!");
     }
 
+    const guildOnlyStr = command.help.guildOnly ? " (Can only be used in servers)" : ""; //If it's guildOnly, add this to the description.
     const specificHelpEmbed = new Discord.MessageEmbed()
         .setTitle(`Help for ${prefix}${command.help.name}`)
-        .setDescription(command.help.description)
+        .setDescription(command.help.description + guildOnlyStr)
         .setColor(embedColor)
         .addField("Usage", `\`${prefix}${command.help.name}${command.help.usage}\``, true)
         .setTimestamp()

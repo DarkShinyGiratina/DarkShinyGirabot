@@ -10,6 +10,7 @@ exports.help = {
   name: "wtp",
   description: "Starts a guessing game of Who's That Pokemon!",
   aliases: exports.aliases,
+  guildOnly: true,
   usage: " <amount of times to play (1-25)>"
 };
 

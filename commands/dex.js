@@ -13,6 +13,7 @@ exports.help = {
   name: "dex",
   description: "Gives information on a specific Pokemon.",
   aliases: exports.aliases,
+  guildOnly: false,
   usage: " <pokemon>"
 };
 

@@ -105,3 +105,9 @@ dist
 
 #xmlhttprequest file
 .node-xmlhttprequest-sync-3216
+
+#workspace
+*.code-workspace
+
+#.history folder
+.history/
