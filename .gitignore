@@ -109,5 +109,5 @@ dist
 #workspace
 *.code-workspace
 
-#history folder
-history/
+#.history folder
+.history/
