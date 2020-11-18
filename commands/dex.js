@@ -57,7 +57,7 @@ exports.run = (client, message, args) => {
   //console.log("Name: " + name);
 
   console.log(name);
-  let baseName = name; //This will be the name that gets used for other things down the line.
+ 
   let monData = dex[name];
   console.log(monData);
 
@@ -72,6 +72,8 @@ exports.run = (client, message, args) => {
       }
     }
   }
+
+  let baseName = name; //This will be the name that gets used for other things down the line.
 
   if (!monData) {
     message.channel.send("Pokemon not found! :(");
