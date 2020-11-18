@@ -108,6 +108,3 @@ dist
 
 #workspace
 *.code-workspace
-
-#history folder
-history/

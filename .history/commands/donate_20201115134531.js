@@ -8,6 +8,5 @@ exports.help = {
   name: "donate",
   description: "Tells you how to donate to the bot!",
   aliases: exports.aliases,
-  guildOnly: false,
   usage: ""
 };

@@ -16,7 +16,7 @@ module.exports = async (client, message) => {
   // If that command doesn't exist, silently exit and do nothing
   if (!command) return;
 
-  if (message.channel.type === "dm" && command.help.guildOnly) { //Server Only commands.
+  if (message.channel.type === "dm" && command.guildOnly) { //Server Only commands.
     return message.channel.send("This command only works in servers!");
   }
 

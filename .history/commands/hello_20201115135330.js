@@ -4,7 +4,6 @@ exports.help = {
   name: "hello",
   description: "Says hi to you!",
   aliases: exports.aliases,
-  guildOnly: false,
   usage: ""
 };
 

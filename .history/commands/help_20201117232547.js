@@ -5,7 +5,6 @@ exports.help = {
   name: "help",
   description: "Gives help information!",
   aliases: exports.aliases,
-  guildOnly: false,
   usage: " <command name>"
 }
 
