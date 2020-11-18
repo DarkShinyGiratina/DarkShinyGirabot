@@ -9,6 +9,6 @@ exports.help = {
 };
 
 exports.run = (client, message, args) => {
-    message.channel.send("prease bro......................")
+    message.channel.send("prease bro......................") //Thanks Jansen!
 }
 
