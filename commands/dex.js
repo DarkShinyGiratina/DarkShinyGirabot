@@ -182,7 +182,7 @@ exports.run = (client, message, args) => {
       })
       .setImage(imageURL)
       .setTimestamp()
-      .setFooter("Made by DarkShinyGiratina#0487 using Pokemon Showdown's Data!", ("https://raw.githubusercontent.com/msikma/pokesprite/master/icons/pokemon/regular/" + name.replace(" ", "-").replace(":","").toLowerCase() + ".png"));
+      .setFooter("Made by DarkShinyGiratina#0487 using Pokemon Showdown's Data!", ("https://raw.githubusercontent.com/msikma/pokesprite/master/pokemon-gen8/regular/" + name.replace(" ", "-").replace(":","").toLowerCase() + ".png"));
 
     message.channel.send(monEmbed);
   }

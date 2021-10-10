@@ -6,6 +6,7 @@
   "dependencies": {
     "discord.js": "^12.2.0",
     "dotenv": "^8.2.0",
+    "dotenv-parse-variables": "^2.0.0",
     "enmap": "^5.2.4",
     "fs": "0.0.1-security",
     "https": "^1.0.0",

@@ -1,5 +1,6 @@
 // get environment variables
-require('dotenv').config();
+let env = require('dotenv').config();
+const parse = require('dotenv-parse-variables');
 const Discord = require("discord.js");
 const client = new Discord.Client();
 
@@ -8,6 +9,7 @@ const fs = require("fs");
 const config = require("./config.json");
 // We also need to make sure we're attaching the config to the CLIENT so it's accessible everywhere!
 client.config = config;
+env = parse(env.parsed);
 
 fs.readdir("./events/", (err, files) => {
   if (err) return console.error(err);
@@ -32,7 +34,7 @@ fs.readdir("./commands/", (err, files) => {
 });
 
 
-client.login(process.env.TOKEN);
+client.login(env.TOKEN);
 
 client.on("ready", () => {
   client.user.setActivity("for !help", { type: "WATCHING"}); //Set custom status.

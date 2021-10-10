@@ -1,9 +1,13 @@
+let env = require('dotenv').config();
+const parse = require('dotenv-parse-variables');
 let dex = require("../data/pokedex.js").Pokedex;
 var XMLHttpRequest = require("xmlhttprequest").XMLHttpRequest;
 const {
   removeSpecialCharacters
 } = require("../globalFunctions.js");
 const Discord = require("discord.js");
+
+env = parse(env.parsed);
 exports.aliases = [];
 
 exports.help = {
@@ -16,6 +20,10 @@ exports.help = {
 
 
 exports.run = async (client, message, args) => {
+  if (message.guild.id === "619250321138515969" && message.channel.id !== "896579717065482291") {
+    message.channel.send("This command is only usable in <#896579717065482291>.");
+    return;
+  }
   const { embedColor } = client.config; //Import the embedColor.
   if (!args.length) {
     message.channel.send("Please enter the amount of times you want to run the game! (1-25)");
@@ -88,7 +96,7 @@ exports.run = async (client, message, args) => {
       .setDescription("Type your guess to answer :) (Don't use any spaces, and make sure the formatting is like Pokemon Showdown!)")
       .setImage(imageURL)
       .setTimestamp()
-      .setFooter("Made by DarkShinyGiratina#0487 using Pokemon Showdown's Data!", ("https://cdn.rawgit.com/msikma/pokesprite/master/pokemon-gen8/regular/" + name.replace(" ", "-").replace(":", "").toLowerCase() + ".png"));
+      .setFooter("Made by DarkShinyGiratina#0487 using Pokemon Showdown's Data!", ("https://raw.githubusercontent.com/msikma/pokesprite/master/pokemon-gen8/regular/" + name.replace(" ", "-").replace(":", "").toLowerCase() + ".png"));
 
     message.channel.send(monEmbed)
 
@@ -110,7 +118,7 @@ exports.run = async (client, message, args) => {
     const stopCollector = message.channel.createMessageCollector(stopFilter, { time: 10000 }); //This will check for !stop
 
     stopCollector.on('collect', m => {
-      m.channel.send("Stopping after this one...");
+      m.channel.send("Stopped! The current round will finish, though.");
       stopNext = true;
     });
 
@@ -140,7 +148,7 @@ exports.run = async (client, message, args) => {
     
     for (let timerChunks = 0; timerChunks < 100; timerChunks++) {
       if (ansCollector.ended) {
-        if (i < numTimes - 1) {
+        if (i < numTimes - 1 && !stopNext) {
           message.channel.send("The next round will begin in 2 seconds.");
         }
         await timer(2000);
@@ -176,6 +184,11 @@ exports.run = async (client, message, args) => {
     }
     message.channel.send("The round is done! Congratulations to <@" + listOfPlayers[maxInds[0]] + ">! You won with " +
       pointsTally[maxInds[0]] + " " + pointOrPoints + "!");
+    if (pointsTally[maxInds[0]] >= 7 && env.gnsCTF) {
+      client.users.fetch(listOfPlayers[maxInds[0]]).then((user) => {
+        user.send("Congratulations! The flag is: " + env.FLAG);
+      });
+    }
   }
 
   else { //Ties!
