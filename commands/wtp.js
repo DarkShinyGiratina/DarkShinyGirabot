@@ -1,5 +1,4 @@
-let env = require('dotenv').config();
-const parse = require('dotenv-parse-variables');
+require('dotenv').config();
 let dex = require("../data/pokedex.js").Pokedex;
 var XMLHttpRequest = require("xmlhttprequest").XMLHttpRequest;
 const {
@@ -7,7 +6,6 @@ const {
 } = require("../globalFunctions.js");
 const Discord = require("discord.js");
 
-env = parse(env.parsed);
 exports.aliases = [];
 
 exports.help = {
@@ -184,9 +182,9 @@ exports.run = async (client, message, args) => {
     }
     message.channel.send("The round is done! Congratulations to <@" + listOfPlayers[maxInds[0]] + ">! You won with " +
       pointsTally[maxInds[0]] + " " + pointOrPoints + "!");
-    if (pointsTally[maxInds[0]] >= 7 && env.gnsCTF) {
+    if (pointsTally[maxInds[0]] >= 7 && process.env.gnsCTF === "true") {
       client.users.fetch(listOfPlayers[maxInds[0]]).then((user) => {
-        user.send("Congratulations! The flag is: " + env.FLAG);
+        user.send("Congratulations! The flag is: " + process.env.FLAG);
       });
     }
   }
