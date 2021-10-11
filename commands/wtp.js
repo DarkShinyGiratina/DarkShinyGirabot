@@ -18,10 +18,6 @@ exports.help = {
 
 
 exports.run = async (client, message, args) => {
-  if (message.guild.id === "619250321138515969" && message.channel.id !== "896579717065482291") {
-    message.channel.send("This command is only usable in <#896579717065482291>.");
-    return;
-  }
   const { embedColor } = client.config; //Import the embedColor.
   if (!args.length) {
     message.channel.send("Please enter the amount of times you want to run the game! (1-25)");
