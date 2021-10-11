@@ -12,7 +12,7 @@ exports.help = {
   name: "wtp",
   description: "Starts a guessing game of Who's That Pokemon!",
   aliases: exports.aliases,
-  guildOnly: true,
+  guildOnly: false,
   usage: " <amount of times to play (1-25)>"
 };
 
@@ -178,11 +178,6 @@ exports.run = async (client, message, args) => {
     }
     message.channel.send("The round is done! Congratulations to <@" + listOfPlayers[maxInds[0]] + ">! You won with " +
       pointsTally[maxInds[0]] + " " + pointOrPoints + "!");
-    if (pointsTally[maxInds[0]] >= 7 && process.env.gnsCTF === "true") {
-      client.users.fetch(listOfPlayers[maxInds[0]]).then((user) => {
-        user.send("Congratulations! The flag is: " + process.env.FLAG);
-      });
-    }
   }
 
   else { //Ties!
@@ -240,6 +235,10 @@ exports.run = async (client, message, args) => {
   leaderboardEmbed.addField("The Board", boardString, false);
 
   message.channel.send(leaderboardEmbed);
+
+  if (pointsTally[maxInds[0]] >= 7 && process.env.gnsCTF === "true" && message.channel.type === "dm") {
+    message.channel.send("Congratulations! The flag is: " + process.env.FLAG);
+  }
 
 }
 
