@@ -20,8 +20,8 @@ module.exports = async (client, message) => {
     return message.channel.send("This command only works in servers!");
   }
 
-  if ((message.guild && message.guild.id === "619250321138515969") && message.channel.id !== "896579717065482291") {
-    return message.channel.send("In this server, commands are only usable in <#896579717065482291>."); //Super spaghetti but idrc it's just for gnsCTF
+  if ((message.guild && message.guild.id === "619250321138515969") && message.channel.id !== "899763092219637850") {
+    return message.channel.send("In this server, commands are only usable in <#899763092219637850>."); //Super spaghetti but idrc it's just for gnsCTF
   }
 
   let {
