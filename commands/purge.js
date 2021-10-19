@@ -21,11 +21,15 @@ exports.run = async (client, message, args) => {
       return channel.send("You need to enter a number to purge.");
     }
 
+    else if (numToPurge < 100) {
+      channel.bulkDelete(numToPurge);
+    }
+
     else {
       for (let i = numToPurge; i > 0; i -= 100) {
         channel.bulkDelete(100);
       }
-      console.log("done");
     }
+    console.log("done");
 }
 
