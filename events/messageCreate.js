@@ -9,8 +9,14 @@ module.exports = async (client, message) => {
     dsgid
   } = require("../config.json");
 
-  if ((message.guild && message.guild.id === integrandsID) && message.author.id != dsgid) { // Integrands Self-Pinging
-    client.users.cache.get(dsgid).send(`There was a new message in #${message.channel.name}!`);
+  if ((message.guild && message.guild.id === integrandsID) && message.author.id !== dsgid) { // Integrands Self-Pinging
+    const dsg = await client.users.fetch(dsgid);
+    const dsgChannel = dsg.dmChannel || (await dsg.createDM());
+    dsgChannel.send(`There was a new message in #${message.channel.name}!`);
+    const messages = await dsgChannel.messages.fetch({limit:1});
+    let deleter = messages.first();
+    if (!deleter.author.bot) return;
+    deleter.delete();
   }
 
 

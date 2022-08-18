@@ -1,4 +1,4 @@
-const Discord = require("discord.js");
+const {EmbedBuilder} = require("discord.js");
 exports.aliases = ["h", "halp"];
 
 exports.help = {
@@ -14,15 +14,15 @@ exports.run = (client, message, args) => {
   const { commands } = client; //client.commands
   const { prefix } = client.config;
   if (!args.length) { //help with no args.
-    const genericHelpEmbed = new Discord.MessageEmbed()
+    const genericHelpEmbed = new EmbedBuilder()
         .setTitle("Help for DarkShinyGirabot")
         .setColor(embedColor)
         .setDescription(`Generic help information. 
         Type \`${prefix}help <command name>\` for specific info!`)
-        .addField("Commands", commands.map(command => "`" + command.help.name + "`").join(", "))
-        .setFooter("Made by DarkShinyGiratina#0487 using Pokemon Showdown's Data!")
+        .addFields({name:"Commands", value:commands.map(command => "`" + command.help.name + "`").join(", ")})
+        .setFooter({text:"Made by DarkShinyGiratina#0487 using Pokemon Showdown's Data!"})
         .setTimestamp();
-    return message.channel.send(genericHelpEmbed)
+    return message.channel.send({embeds: [genericHelpEmbed]})
   }
   else { //help with args.
     const name = args[0].toLowerCase();
@@ -32,16 +32,16 @@ exports.run = (client, message, args) => {
     }
 
     const guildOnlyStr = command.help.guildOnly ? " (Can only be used in servers)" : ""; //If it's guildOnly, add this to the description.
-    const specificHelpEmbed = new Discord.MessageEmbed()
+    const specificHelpEmbed = new EmbedBuilder()
         .setTitle(`Help for ${prefix}${command.help.name}`)
         .setDescription(command.help.description + guildOnlyStr)
         .setColor(embedColor)
-        .addField("Usage", `\`${prefix}${command.help.name}${command.help.usage}\``, true)
+        .addFields({name:"Usage", value:`\`${prefix}${command.help.name}${command.help.usage}\``, inline:true})
         .setTimestamp()
-        .setFooter("Made by DarkShinyGiratina#0487 with Pokemon Showdown's Data!");
+        .setFooter({text:"Made by DarkShinyGiratina#0487 with Pokemon Showdown's Data!"});
     if (command.help.aliases.length > 0) { //If there are aliases.
-      specificHelpEmbed.addField("Aliases", `\`${command.help.aliases.join(", ")}\``);
+      specificHelpEmbed.addFields({name:"Aliases", value:`\`${command.help.aliases.join(", ")}\``});
     }
-    message.channel.send(specificHelpEmbed);
+    message.channel.send({embeds: [specificHelpEmbed]});
   }
 };
