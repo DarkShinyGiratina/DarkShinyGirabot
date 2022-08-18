@@ -1,7 +1,7 @@
 // get environment variables
 require('dotenv').config();
-const Discord = require("discord.js");
-const client = new Discord.Client();
+const { Client, GatewayIntentBits } = require("discord.js");
+const client = new Client({ intents: [GatewayIntentBits.GuildMessages, GatewayIntentBits.Guilds, GatewayIntentBits.MessageContent]});
 
 const Enmap = require("enmap");
 const fs = require("fs");

@@ -3,6 +3,17 @@ module.exports = async (client, message) => {
   // Ignore all bots
   if (message.author.bot) return;
 
+  // This stuff is specifically for integrands messages only, everything else works only for commands
+  let {
+    integrandsID,
+    dsgid
+  } = require("../config.json");
+
+  if ((message.guild && message.guild.id === integrandsID) && message.author.id != dsgid) { // Integrands Self-Pinging
+    client.users.cache.get(dsgid).send(`There was a new message in #${message.channel.name}!`);
+  }
+
+
   // Ignore messages not starting with the prefix (in config.json)
   if (message.content.indexOf(client.config.prefix) !== 0) return;
 
@@ -12,6 +23,7 @@ module.exports = async (client, message) => {
 
   // Grab the command data from the client.commands Enmap
   const command = client.commands.get(commandName) || client.commands.find(cmd => cmd.aliases && cmd.aliases.includes(commandName));
+
 
   // If that command doesn't exist, silently exit and do nothing
   if (!command) return;
