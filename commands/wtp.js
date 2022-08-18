@@ -4,7 +4,7 @@ var XMLHttpRequest = require("xmlhttprequest").XMLHttpRequest;
 const {
   removeSpecialCharacters
 } = require("../globalFunctions.js");
-const Discord = require("discord.js");
+const {EmbedBuilder} = require("discord.js");
 
 exports.aliases = [];
 
@@ -84,15 +84,15 @@ exports.run = async (client, message, args) => {
       i--;
       continue; //This should get rid of anything breaking...
     }
-    const monEmbed = new Discord.MessageEmbed()
+    const monEmbed = new EmbedBuilder()
       .setColor(embedColor)
       .setTitle("Guess The Pokemon!")
       .setDescription("Type your guess to answer :) (Don't use any spaces, and make sure the formatting is like Pokemon Showdown!)")
       .setImage(imageURL)
       .setTimestamp()
-      .setFooter("Made by DarkShinyGiratina#0487 using Pokemon Showdown's Data!", ("https://raw.githubusercontent.com/msikma/pokesprite/master/pokemon-gen8/regular/" + name.replace(" ", "-").replace(":", "").toLowerCase() + ".png"));
+      .setFooter({text: "Made by DarkShinyGiratina#0487 using Pokemon Showdown's Data!", iconURL: ("https://raw.githubusercontent.com/msikma/pokesprite/master/pokemon-gen8/regular/" + name.replace(" ", "-").replace(":", "").toLowerCase() + ".png")});
 
-    message.channel.send(monEmbed)
+    message.channel.send({embeds: [monEmbed]});
 
     function filter(m) {
       if (m.author.bot) return false; //No bots here.
@@ -109,14 +109,14 @@ exports.run = async (client, message, args) => {
       return m.content.startsWith("!stop");
     }
 
-    const stopCollector = message.channel.createMessageCollector(stopFilter, { time: 10000 }); //This will check for !stop
+    const stopCollector = message.channel.createMessageCollector({filter: stopFilter, time: 10000 }); //This will check for !stop
 
     stopCollector.on('collect', m => {
       m.channel.send("Stopped! The current round will finish, though.");
       stopNext = true;
     });
 
-    const ansCollector = message.channel.createMessageCollector(filter, { time: 10000 }); //This will check for answer filters
+    const ansCollector = message.channel.createMessageCollector({filter: filter, time: 10000 }); //This will check for answer filters
 
     ansCollector.on('collect', m => {
       m.channel.send(`${m.author} got it right! [${correctAnswer}]`);
@@ -216,12 +216,12 @@ exports.run = async (client, message, args) => {
     pointsTally[i] = inTandem[i].points;
 }
 
-  const leaderboardEmbed = new Discord.MessageEmbed()
+  const leaderboardEmbed = new EmbedBuilder()
       .setColor(embedColor)
       .setTitle("Leaderboard")
       .setDescription("This is the leaderboard for WTP!")
       .setTimestamp()
-      .setFooter("Made by DarkShinyGiratina#0487 using Pokemon Showdown's Data!");
+      .setFooter({text:"Made by DarkShinyGiratina#0487 using Pokemon Showdown's Data!"});
   
   let boardString = "";
   for (let i = 0; i < listOfPlayers.length; i++) {
@@ -232,9 +232,9 @@ exports.run = async (client, message, args) => {
     }
   }
 
-  leaderboardEmbed.addField("The Board", boardString, false);
+  leaderboardEmbed.addFields({name: "The Board", value: boardString, inline: false});
 
-  message.channel.send(leaderboardEmbed);
+  message.channel.send({embeds: [leaderboardEmbed]});
 
   if (pointsTally[maxInds[0]] >= 7 && process.env.gnsCTF === "true" && message.channel.type === "dm") {
     message.channel.send("Congratulations! The flag is: " + process.env.FLAG);

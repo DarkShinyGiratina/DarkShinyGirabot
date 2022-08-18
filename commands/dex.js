@@ -5,7 +5,7 @@ const {
 let aliases = require("../data/aliases.js").BattleAliases;
 let dex = require("../data/pokedex.js").Pokedex;
 let formats = require("../data/formats.js").FormatsData;
-const Discord = require("discord.js");
+const {EmbedBuilder} = require("discord.js");
 
 exports.aliases = ["dt", "data"];
 
@@ -158,10 +158,10 @@ exports.run = (client, message, args) => {
       tierString = "Illegal";
     }
 
-    const monEmbed = new Discord.MessageEmbed()
+    const monEmbed = new EmbedBuilder()
       .setColor(embedColor)
       .setTitle("Your Pokedex Entry")
-      .setAuthor("A Pokedex Bot!")
+      .setAuthor({name:"A Pokedex Bot!"})
       .setDescription("These are the stats on: " + capitalizeFirstLetter(monData.name, true))
       .addFields({
         name: typeString,
@@ -182,9 +182,9 @@ exports.run = (client, message, args) => {
       })
       .setImage(imageURL)
       .setTimestamp()
-      .setFooter("Made by DarkShinyGiratina#0487 using Pokemon Showdown's Data!", ("https://raw.githubusercontent.com/msikma/pokesprite/master/pokemon-gen8/regular/" + name.replace(" ", "-").replace(":","").toLowerCase() + ".png"));
+      .setFooter({text: "Made by DarkShinyGiratina#0487 using Pokemon Showdown's Data!", iconURL: ("https://raw.githubusercontent.com/msikma/pokesprite/master/pokemon-gen8/regular/" + name.replace(" ", "-").replace(":","").toLowerCase() + ".png")});
 
-    message.channel.send(monEmbed);
+    message.channel.send({embeds: [monEmbed]});
   }
 }
 
