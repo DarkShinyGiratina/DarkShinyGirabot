@@ -19,7 +19,6 @@ module.exports = async (client, message) => {
     deleter.delete();
   }
 
-
   // Ignore messages not starting with the prefix (in config.json)
   if (message.content.indexOf(client.config.prefix) !== 0) return;
 
@@ -34,7 +33,8 @@ module.exports = async (client, message) => {
   // If that command doesn't exist, silently exit and do nothing
   if (!command) return;
 
-  if (message.channel.type === "dm" && command.help.guildOnly) { //Server Only commands.
+
+  if (message.channel.type === 1 && command.help.guildOnly) { //Server Only commands.
     return message.channel.send("This command only works in servers!");
   }
 
@@ -55,17 +55,17 @@ module.exports = async (client, message) => {
   }
 
   let currentChannelInd = channelList.indexOf(message.channel.id);
-  console.log(channelList);
-  console.log(currentChannelInd);
+  //console.log(channelList);
+  //console.log(currentChannelInd);
   //If you receive a message, push it to the queue for that channel
   queuePerChannel[currentChannelInd]++;
-  console.log("Queues: " + queuePerChannel)
+  //console.log("Queues: " + queuePerChannel)
   // Run the command
 
 
 
   try {
-    console.log(queuePerChannel[currentChannelInd]);
+    //console.log(queuePerChannel[currentChannelInd]);
     //If the queue is filled for that specific channel
     if (queuePerChannel[currentChannelInd] > 1) {
       message.channel.send("Only one command may be run at once!");

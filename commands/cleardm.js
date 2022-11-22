@@ -17,4 +17,5 @@ exports.run = async (client, message, args) => {
       if (!message.author.bot) return;
       message.delete().catch(console.log("Tried deleting a message I already deleted"));
     });
+    console.log("Done!");
 }

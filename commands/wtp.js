@@ -76,11 +76,12 @@ exports.run = async (client, message, args) => {
       imgPoke = removeSpecialCharacters(imgPoke);
     }
 
-    console.log(imgPoke + " before image!");
+    //console.log(imgPoke + " before image!");
     let randomNum = Math.floor(Math.random()*64); //Random number from 0-64.
-    imageURL = randomNum === 0 ? 'https://play.pokemonshowdown.com/sprites/xyani-shiny/' + imgPoke.replace(" ", "") + ".gif" : 'https://play.pokemonshowdown.com/sprites/xyani/' + imgPoke.replace(" ", "") + ".gif"; //Shiny!
+    imageURL = randomNum === 0 ? 'https://play.pokemonshowdown.com/sprites/ani-shiny/' + imgPoke.replace(" ", "") + ".gif" : 'https://play.pokemonshowdown.com/sprites/ani/' + imgPoke.replace(" ", "") + ".gif"; //Shiny!
+    if (!UrlExists(imageURL)) imageURL = 'https://play.pokemonshowdown.com/sprites/dex/' + imgPoke.replace(" ", "") + ".png"; 
     if (!UrlExists(imageURL) || imgPoke.includes("totem")) {
-      console.log("Get out of here, pesky bad formatting and totems!");
+      //console.log("Get out of here, pesky bad formatting and totems!");
       i--;
       continue; //This should get rid of anything breaking...
     }
@@ -101,7 +102,7 @@ exports.run = async (client, message, args) => {
       //Some typo handling: If two characters are swapped, you're good.
       let swapped = isEqualIfSwapped(guess.toLowerCase(), correctAnswer.toLowerCase());
       let isOneOff = oneOff(guess.toLowerCase(), correctAnswer.toLowerCase());
-      console.log(isOneOff);
+      //console.log(isOneOff);
       return properStart && (swapped || (!swapped && isOneOff)); //Either two letters are swapped, or one letter is incorrect.
     }
 
@@ -127,14 +128,14 @@ exports.run = async (client, message, args) => {
       } else {
         pointsTally[listOfPlayers.indexOf(m.author.id)]++;
       }
-      console.log(pointsTally);
-      console.log(listOfPlayers);
+      //console.log(pointsTally);
+      //console.log(listOfPlayers);
       ansCollector.stop(); //Stop it
     });
 
     ansCollector.on('end', collected => {
       //If nobody answered, collected.size will be 0.
-      console.log("END!");
+      //console.log("END!");
       if (collected.size == 0) {
         message.channel.send(`Nobody got the answer! The correct answer was ${correctAnswer}.`);
       }
@@ -153,10 +154,10 @@ exports.run = async (client, message, args) => {
   }
 
  
-  console.log(listOfPlayers + " after round.");
-  console.log(pointsTally);
+  //console.log(listOfPlayers + " after round.");
+  //console.log(pointsTally);
   let maxInds = findMaxIndex(pointsTally);
-  console.log(maxInds);
+  //console.log(maxInds);
   if (pointsTally[0] == undefined) {
     message.channel.send("Nobody won! Well, nobody got any points at all...");
     return;

@@ -2,10 +2,12 @@ const {
   capitalizeFirstLetter,
   removeSpecialCharacters
 } = require("../globalFunctions.js");
-let aliases = require("../data/aliases.js").BattleAliases;
+let aliases = require("../data/aliases.js").Aliases;
 let dex = require("../data/pokedex.js").Pokedex;
 let formats = require("../data/formats.js").FormatsData;
 const {EmbedBuilder} = require("discord.js");
+
+
 
 exports.aliases = ["dt", "data"];
 
@@ -17,7 +19,7 @@ exports.help = {
   usage: " <pokemon>"
 };
 
-exports.run = (client, message, args) => {
+exports.run = async (client, message, args) => {
   const { embedColor } = client.config; //Import the embed color.
   if (!args.length) {
     message.channel.send("Please actually give a Pokemon.");
@@ -30,7 +32,7 @@ exports.run = (client, message, args) => {
     name = aliases[name].toLowerCase();
   }
   //console.log("https://pokeapi.co/api/v2/pokemon/" + name);
-  console.log(name);
+  //console.log(name);
   name = removeSpecialCharacters(name);
 
   let splitName = name.split(" ");
@@ -54,16 +56,16 @@ exports.run = (client, message, args) => {
 
 
 
-  console.log("Step 1!");
+  //console.log("Step 1!");
   //console.log("Name: " + name);
 
-  console.log(name);
+  //console.log(name);
  
   let monData = dex[name];
-  console.log(monData);
+  //console.log(monData);
 
   if (!monData) {
-    console.log("Dex Number Checker");
+    //console.log("Dex Number Checker");
     for (const mon in dex) {
       if (dex[mon].num == Number(name)) {
         name = dex[mon].name.toLowerCase();
@@ -90,7 +92,7 @@ exports.run = (client, message, args) => {
     }
 
     //Abilities
-    console.log("About to make abilities!");
+    //console.log("About to make abilities!");
     var abilityString = monData.abilities[0];
     for (var i = 1; i < Object.keys(monData.abilities).length; i++) {
 
@@ -106,7 +108,7 @@ exports.run = (client, message, args) => {
         abilityString = abilityString + ", " + monData.abilities[i];
       }
 
-      console.log(abilityString);
+      //console.log(abilityString);
     }
 
     if (abilityString === '' || abilityString === undefined) abilityString = 'None';
@@ -136,17 +138,21 @@ exports.run = (client, message, args) => {
       imgPoke = removeSpecialCharacters(imgPoke);
     }
     
-    console.log(imgPoke + " before image!");
-    let imageURL = 'https://play.pokemonshowdown.com/sprites/xyani/' + imgPoke.replace(" ", "") + ".gif";
+    //console.log(imgPoke + " before image!");
+    let urlExist = await import("url-exist");
+    let imageURL = 'https://play.pokemonshowdown.com/sprites/ani/' + imgPoke.replace(" ", "") + ".gif";
+
+    if (!await urlExist.default(imageURL)) imageURL = 'https://play.pokemonshowdown.com/sprites/dex/' + imgPoke.replace(" ", "") + ".png";
+    //console.log(imageURL);
 
     //Base Stats
     let statsString = "";
 
     for (let i in monData.baseStats) {
-      console.log(i);
-      console.log(Number(monData.baseStats[i]));
+      //console.log(i);
+      //console.log(Number(monData.baseStats[i]));
       statsString += Number(monData.baseStats[i]);
-      console.log(statsString);
+      //console.log(statsString);
       if (i != "spe") {
         statsString += "/"
       }
@@ -156,6 +162,11 @@ exports.run = (client, message, args) => {
     let tierString = formats[baseName].tier;
     if (tierString === undefined) {
       tierString = "Illegal";
+    }
+
+    let natDexTierString = formats[baseName].natDexTier;
+    if (natDexTierString === undefined) {
+      natDexTierString = tierString;
     }
 
     const monEmbed = new EmbedBuilder()
@@ -176,10 +187,15 @@ exports.run = (client, message, args) => {
         value: statsString,
         inline: false
       }, {
-        name: "Tier:",
+        name: "Current Gen Tier:",
         value: tierString,
         inline: true
-      })
+      }, {
+        name: "National Dex Tier:",
+        value: natDexTierString,
+        inline: true
+      }
+      )
       .setImage(imageURL)
       .setTimestamp()
       .setFooter({text: "Made by DarkShinyGiratina#0487 using Pokemon Showdown's Data!", iconURL: ("https://raw.githubusercontent.com/msikma/pokesprite/master/pokemon-gen8/regular/" + name.replace(" ", "-").replace(":","").toLowerCase() + ".png")});
