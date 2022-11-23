@@ -134,7 +134,7 @@ exports.run = async (client, message, args) => {
     }
 
     //A bunch of really dumb hard coded error handling.
-    if (imgPoke === ("kommo-o") || imgPoke === ("hakamo-o") || imgPoke === ("jangmo-o") || imgPoke === ("type: null") || imgPoke === ("nidoran-m") || imgPoke.startsWith("farfetch") && !imgPoke.endsWith("galar") || imgPoke === ("sirfetch")) {
+    if (imgPoke === ("ting-lu") || imgPoke === ("wo-chien") || imgPoke === ("chi-yu") || imgPoke === ("chien-pao") || imgPoke === ("kommo-o") || imgPoke === ("hakamo-o") || imgPoke === ("jangmo-o") || imgPoke === ("type: null") || imgPoke === ("nidoran-m") || imgPoke.startsWith("farfetch") && !imgPoke.endsWith("galar") || imgPoke === ("sirfetch")) {
       imgPoke = removeSpecialCharacters(imgPoke);
     }
     
