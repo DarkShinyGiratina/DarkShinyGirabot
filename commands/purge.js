@@ -15,8 +15,9 @@ exports.run = async (client, message, args) => {
     return channel.send("Only my owner can purge messages!");
   }
 
-  let numToPurge = args[0];
+  let numToPurge = parseInt(args[0]);
   if (args[1]) {
+    console.log(numToPurge + 1);
     channel.messages
       .fetch({
         limit: numToPurge + 1,
@@ -24,9 +25,13 @@ exports.run = async (client, message, args) => {
       .then((messages) => {
         const botMessages = [];
         messages
-          .filter((m) => m.author.id === message.mentions.users.first().id)
+          .filter((m) => m.author.id === args[1].replace(/[\\<>@#&!]/g, ""))
           .forEach((msg) => botMessages.push(msg));
-        message.channel.bulkDelete(botMessages);
+        if (botMessages.length > 0) {
+          channel.bulkDelete(botMessages);
+        } else {
+          return channel.send("No messages to delete! Maybe an error in the arguments...");
+        }
       });
   } else {
     if (isNaN(numToPurge)) {
